@@ -29,6 +29,7 @@ Router.post('/add', fetchUser, [
 
 
     try {
+        console.log(req.body)
 
         // valide user info 
         const errors = validationResult(req);
@@ -38,6 +39,7 @@ Router.post('/add', fetchUser, [
         // valide user info  end
         const { title, desc, tag } = req.body
         const user = req.user.id
+        console.log(user)
         const notes = new Notes({ title, desc, tag, user })
         const saveNotes = await notes.save()
         res.status(200).json(saveNotes)
