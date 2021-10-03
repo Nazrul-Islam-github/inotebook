@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useContext } from "react";
 import NotesContext from "../context/notes/noteContext";
+import Notes from "./Notes";
 const AddNote = () => {
   const context = useContext(NotesContext);
   const { addNote } = context;
@@ -8,6 +9,7 @@ const AddNote = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     addNote(note.title,note.desc,note.tag)
+    setNote({ title: "", desc: "", tag: "default" })
   };
 
   const onChange = (event) => {
@@ -31,6 +33,7 @@ const AddNote = () => {
             aria-describedby="emailHelp"
             name="title"
             onChange={onChange}
+            value={note.title}
           />
         </div>
         <div className="mb-3">
@@ -43,22 +46,15 @@ const AddNote = () => {
             id="exampleInputPassword1"
             name="desc"
             onChange={onChange}
+            value={note.desc}
           />
         </div>
-        <div className="mb-3 form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-          />
-          <label className="form-check-label" htmlFor="exampleCheck1">
-            Check me out
-          </label>
-        </div>
+      
         <button
           type="submit"
           className="btn btn-primary"
           onClick={handleSubmit}
+          disabled={note.title<5|| note.desc<5}
         >
           Submit
         </button>
