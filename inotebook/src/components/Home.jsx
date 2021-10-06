@@ -5,14 +5,14 @@ import NotesContext from "../context/notes/noteContext";
 import Notes from "./Notes";
 
 
-const Home = () => {
+const Home = ({showAlert}) => {
   return (
     <>
-      <Navbar />
+      
       <div className="container my-3">
   
 
-        <Notes />
+        <Notes showAlert={showAlert} />
       </div>
     </>
   );

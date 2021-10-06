@@ -19,14 +19,14 @@ Router.post('/createuser', [
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ success: false, errors: errors.array() });
         }
         // --------------Validate User info End-----------
         const { name, email, password } = req.body;
         const error = []
         const user = await User.findOne({ email: email });
         if (user) {
-            error.push({ msg: "This email is already exists" })
+            error.push({ success: false, msg: "This email is already exists" })
             return res.status(400).json(error)
         }
         else {
@@ -52,7 +52,7 @@ Router.post('/createuser', [
 
                             const authToken = jwt.sign(data, process.env.JWT_TOKEN)
 
-                            return res.json({ authToken })
+                            return res.json({ success: true, authToken })
                         })
                         .catch(error => {
                             console.error(error);
@@ -84,10 +84,10 @@ Router.post('/login', [
 
     try {
         let user = await User.findOne({ email: email });
-        if (!user) return res.status(400).json({ error: "invalid info " });
+        if (!user) return res.status(400).json({ error: "invalid info ", success: false });
 
         const passwordCompare = await bcrypt.compare(password, user.password);
-        if (!passwordCompare) { return res.status(400).json({ error: "invalid info " }); }
+        if (!passwordCompare) { return res.status(400).json({ error: "invalid info ", success: false }); }
 
 
 
@@ -98,8 +98,9 @@ Router.post('/login', [
         }
 
 
-        const authToken = jwt.sign(data, process.env.JWT_TOKEN)
-        return res.json({ authToken })
+        const authToken = jwt.sign(data, process.env.JWT_TOKEN);
+
+        return res.json({ success: true, authToken })
     } catch (error) {
         return res.status(500).send("server error")
     }
